@@ -1,7 +1,7 @@
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NFTMaker from './abi/NFTMaker.json';
-import ethers from 'ethers'
+import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDEyZUM3OTFBREM0NGYyMmI0ODlmNEYxQTk1ODk2ODM2M0RGRUVGNzAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjUyMzU4NjIzMTgsIm5hbWUiOiJuZnQtbWFrZXIifQ.ozxz5s4zkcGENyU9kr_pLRK1p4LBgqgGAULJRqcwxcQ";
@@ -12,9 +12,35 @@ function App() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [isLoading, setIsLoading] = useState(false);
 
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const ethereum = makeWeb3Client();
+      if (!ethereum){
+        console.log("Make sure you have Metamask")
+        return
+      } else {
+        console.log("We have an ethereum object:", ethereum)
+      }
+
+      const accounts = await ethereum.request({ method: "eth_accounts" })
+      if (accounts.length !== 0) {
+        console.log("Found acccount:", accounts[0])
+        setCurrentAccount(accounts[0])
+      } else {
+        console.log("Account not Founded")
+      }
+    } catch (error){
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    checkIfWalletIsConnected()
+  }, [])
+
   const connectWallet = async () => {
     const ethereum = makeWeb3Client()
-    const accounts = await ethereum.request({ method: "eth_accounts"})
+    const accounts = await ethereum.request({ method: "eth_requestAccounts"})
     if (accounts.length !== 0){
       setCurrentAccount(accounts[0])
     } else {
@@ -55,6 +81,9 @@ function App() {
     <div className="App">
       <div>
         <input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
+      </div>
+      <div>
+        <button className="connectWallet" onClick={connectWallet}>connect Wallet</button>
       </div>
     </div>
   );
