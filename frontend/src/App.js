@@ -11,11 +11,12 @@ function App() {
 
   const [currentAccount, setCurrentAccount] = useState("")
   const [isLoading, setIsLoading] = useState(false);
+  const [ipfsValue, setIpfsValue] = useState("");
 
   const checkIfWalletIsConnected = async () => {
     try {
       const ethereum = makeWeb3Client();
-      if (!ethereum){
+      if (!ethereum) {
         console.log("Make sure you have Metamask")
         return
       } else {
@@ -29,7 +30,7 @@ function App() {
       } else {
         console.log("Account not Founded")
       }
-    } catch (error){
+    } catch (error) {
       console.log(error)
     }
   }
@@ -40,15 +41,15 @@ function App() {
 
   const connectWallet = async () => {
     const ethereum = makeWeb3Client()
-    const accounts = await ethereum.request({ method: "eth_requestAccounts"})
-    if (accounts.length !== 0){
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" })
+    if (accounts.length !== 0) {
       setCurrentAccount(accounts[0])
     } else {
       console.log("Account not found")
     }
   }
 
-  const mintNFT = async(cid)=> {
+  const mintNFT = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const signer = provider.getSigner()
@@ -57,7 +58,12 @@ function App() {
         NFTMaker.abi,
         signer
       )
-    } catch (error){
+      let nftTxn = await contract.mintNFT("sample", ipfsValue)
+      await nftTxn.wait()
+      console.log(
+        `Mined, see transaction: https://mumbai.etherscan.io/tx/${nftTxn.hash}`
+      );
+    } catch (error) {
       console.log(error)
     }
   }
@@ -85,17 +91,31 @@ function App() {
       <div>
         <button className="connectWallet" onClick={connectWallet}>connect Wallet</button>
       </div>
+      <div>
+        <textarea
+          className='textArea'
+          name="ipfsLink"
+          placeholder="IPFSのリンクを入力"
+          type="text"
+          id="ipfs"
+          value={ipfsValue}
+          onChange={(e) => setIpfsValue(e.target.value)}
+        />
+        <button className="mintNft" onClick={mintNFT}>
+          Mint
+        </button>
+      </div>
     </div>
   );
 }
 
 function makeStorageClient() {
-  return new Web3Storage({ token: API_KEY})
+  return new Web3Storage({ token: API_KEY })
 }
 
 function makeWeb3Client() {
   const { ethereum } = window
-  if (!ethereum){
+  if (!ethereum) {
     console.log("metamask object not found")
     return
   } else {
@@ -104,14 +124,14 @@ function makeWeb3Client() {
   return ethereum
 }
 
-const retrive = async(cid) => {
+const retrive = async (cid) => {
   const client = makeStorageClient();
   const response = await client.get(cid)
-  if(!response.ok){
+  if (!response.ok) {
     throw new Error("failed to get response")
   }
   const files = await response.files()
-  for (const file of files){
+  for (const file of files) {
     console.log("file.cid:", file.cid)
   }
 }
