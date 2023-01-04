@@ -36,6 +36,7 @@
     ]
   },
   "devDependencies": {
+    "@mui/material": "^5.11.3",
     "ethers": "^5.7.2",
     "react-loader-spinner": "^5.3.4",
     "web3.storage": "^4.4.0"
