@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import { Button } from "@mui/material";
 import NFTMaker from './abi/NFTMaker.json';
 import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
@@ -85,26 +86,31 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
-      </div>
-      <div>
-        <button className="connectWallet" onClick={connectWallet}>connect Wallet</button>
-      </div>
-      <div>
-        <textarea
-          className='textArea'
-          name="ipfsLink"
-          placeholder="IPFSのリンクを入力"
-          type="text"
-          id="ipfs"
-          value={ipfsValue}
-          onChange={(e) => setIpfsValue(e.target.value)}
-        />
-        <button className="mintNft" onClick={mintNFT}>
-          Mint
-        </button>
-      </div>
+      {!currentAccount ? (
+        <Button variant='contained' className="Button" onClick={connectWallet}>
+          Connect Wallet
+        </Button>
+      ) : (
+        <div>
+          <div>
+            <input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
+          </div>
+          <div>
+            <textarea
+              className='textArea'
+              name="ipfsLink"
+              placeholder="IPFSのリンクを入力"
+              type="text"
+              id="ipfs"
+              value={ipfsValue}
+              onChange={(e) => setIpfsValue(e.target.value)}
+            />
+            <Button variant='contained' className="Button" onClick={mintNFT}>
+              Mint
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
