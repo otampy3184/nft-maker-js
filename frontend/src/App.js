@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { Button, Input, TextareaAutosize, TextField } from "@mui/material";
+import { Button, Input, Link, TextField } from "@mui/material";
 // import NFTMaker from './abi/NFTMaker_goerli.json';
 import NFTMaker from './abi/NFTMaker_mumbai.json'
 import { ethers } from 'ethers'
@@ -17,6 +17,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [ipfsValue, setIpfsValue] = useState("");
   const [result, setResult] = useState("")
+  const [OpenseaLink, setOpenseaLink] = useState("");
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -114,9 +115,11 @@ function App() {
         );
         connectedContract.on("NewNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
-          alert(
-            `Openseaへのリンク : https://testnets.opensea.io/assets/goerli/${CONTRACT_ADDRESS_MUMBAI}/${tokenId.toNumber()}`
-          );
+          // alert(
+          //   `Openseaへのリンク : https://testnets.opensea.io/assets/goerli/${CONTRACT_ADDRESS_MUMBAI}/${tokenId.toNumber()}`
+          // );
+          const link = `https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS_MUMBAI}/${tokenId.toNumber()}`
+          setOpenseaLink(link);
         })
         console.log("Setup event lisner");
       } else {
@@ -195,23 +198,28 @@ function App() {
               </div>
             ) : null}
             <div>
+              <div>
+                <TextField
+                  variant='outlined'
+                  name="ipfsLink"
+                  placeholder="IPFSのリンクを入力"
+                  type="text"
+                  id="ipfs"
+                  value={result}
+                  onChange={(e) => setResult(e.target.value)}
+                  multiline
+                  rows={1}
+                  fullWidth
+                />
+                <Button variant='contained' onClick={mintNFT}>
+                  Mint
+                </Button>
+              </div>
+              {OpenseaLink ? (
                 <div>
-                  <TextField
-                    variant='outlined'
-                    name="ipfsLink"
-                    placeholder="IPFSのリンクを入力"
-                    type="text"
-                    id="ipfs"
-                    value={result}
-                    onChange={(e) => setIpfsValue(e.target.value)}
-                    multiline
-                    rows={1}
-                    fullWidth
-                  />
-                  <Button variant='contained' onClick={mintNFT}>
-                    Mint
-                  </Button>
+                  <Link href=''>Link To Opensea</Link>
                 </div>
+              ) : null}
             </div>
           </div>
         )}
