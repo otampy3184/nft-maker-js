@@ -60,7 +60,9 @@ function App() {
         NFTMaker.abi,
         signer
       )
-      let nftTxn = await contract.mintNFT("sample", ipfsValue)
+      let nftTxn = await contract.mintNFT("sample", ipfsValue, {
+        gasLimit: 3000000,
+      })
       await nftTxn.wait()
       console.log(
         `Mined, see transaction: https://mumbai.etherscan.io/tx/${nftTxn.hash}`
