@@ -126,25 +126,45 @@ function App() {
           </div>
           {result ? (
             <div>
-              <pre>{result}</pre>
-              <button onClick={() => navigator.clipboard.writeText(result)}>
-                Copy IPFS link
-              </button>
+              <TextField
+                value={result}
+                multiline
+                rows={1}
+                variant="outlined"
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigator.clipboard.writeText(result)}
+              >
+                Copy IPFS Link
+              </Button>
             </div>
           ) : null}
           <div>
-            <TextField
-              variant='standard'
-              name="ipfsLink"
-              placeholder="IPFSのリンクを入力"
-              type="text"
-              id="ipfs"
-              value={ipfsValue}
-              onChange={(e) => setIpfsValue(e.target.value)}
-            />
-            <Button variant='contained' onClick={mintNFT}>
-              Mint
-            </Button>
+            {result ? (
+              <div>
+                <TextField
+                  variant='outlined'
+                  name="ipfsLink"
+                  placeholder="IPFSのリンクを入力"
+                  type="text"
+                  id="ipfs"
+                  value={ipfsValue}
+                  onChange={(e) => setIpfsValue(e.target.value)}
+                  multiline
+                  rows={1}
+                  fullWidth
+                />
+                <Button variant='contained' onClick={mintNFT}>
+                  Mint
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       )}
