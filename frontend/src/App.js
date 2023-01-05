@@ -7,7 +7,7 @@ import { Web3Storage } from 'web3.storage'
 import Loading from "./components/Loading"
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDEyZUM3OTFBREM0NGYyMmI0ODlmNEYxQTk1ODk2ODM2M0RGRUVGNzAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjUyMzU4NjIzMTgsIm5hbWUiOiJuZnQtbWFrZXIifQ.ozxz5s4zkcGENyU9kr_pLRK1p4LBgqgGAULJRqcwxcQ";
-const CONTRACT_ADDRESS = "0x39Ffa1CdEe990a3Dff74875f7f20fc3dA37d8904"
+const CONTRACT_ADDRESS = "0xad0c8B98E36c83c018Aa4b95d8e8ba8D9f72aa31"
 
 function App() {
 
@@ -69,7 +69,7 @@ function App() {
       await nftTxn.wait()
       console.log("Minted ---", nftTxn.hash);
       console.log(
-        `Mined, see transaction: https://mumbai.etherscan.io/tx/${nftTxn.hash}`
+        `Mined, see transaction: https://goerli.etherscan.io/tx/${nftTxn.hash}`
       );
       setIsLoading(false)
     } catch (error) {
