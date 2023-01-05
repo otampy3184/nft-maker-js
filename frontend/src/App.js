@@ -115,59 +115,61 @@ function App() {
 
   return (
     <div className="App">
-      {!currentAccount ? (
-        <Button variant='contained' className="Button" onClick={connectWallet}>
-          Connect Wallet
-        </Button>
-      ) : (
-        <div>
+      <div className='outerBox'>
+        {!currentAccount ? (
+          <Button variant='contained' className="Button" onClick={connectWallet}>
+            Connect Wallet
+          </Button>
+        ) : (
           <div>
-            <Input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
-          </div>
-          {result ? (
             <div>
-              <TextField
-                value={result}
-                multiline
-                rows={1}
-                variant="outlined"
-                fullWidth
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigator.clipboard.writeText(result)}
-              >
-                Copy IPFS Link
-              </Button>
+              <Input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
             </div>
-          ) : null}
-          <div>
             {result ? (
               <div>
                 <TextField
-                  variant='outlined'
-                  name="ipfsLink"
-                  placeholder="IPFSのリンクを入力"
-                  type="text"
-                  id="ipfs"
-                  value={ipfsValue}
-                  onChange={(e) => setIpfsValue(e.target.value)}
+                  value={result}
                   multiline
                   rows={1}
+                  variant="outlined"
                   fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
-                <Button variant='contained' onClick={mintNFT}>
-                  Mint
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigator.clipboard.writeText(result)}
+                >
+                  Copy IPFS Link
                 </Button>
               </div>
             ) : null}
+            <div>
+              {result ? (
+                <div>
+                  <TextField
+                    variant='outlined'
+                    name="ipfsLink"
+                    placeholder="IPFSのリンクを入力"
+                    type="text"
+                    id="ipfs"
+                    value={ipfsValue}
+                    onChange={(e) => setIpfsValue(e.target.value)}
+                    multiline
+                    rows={1}
+                    fullWidth
+                  />
+                  <Button variant='contained' onClick={mintNFT}>
+                    Mint
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
