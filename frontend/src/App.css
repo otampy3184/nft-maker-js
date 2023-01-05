@@ -51,8 +51,9 @@
   border: none;
   padding: 200px;
   border-radius: 50px;
-  box-shadow: 0px 0px 20px rgb(15, 231, 202);
+  box-shadow: 0px 0px 10px rgb(15, 231, 202);
   color: gray;
+  background-color: #23ca9b21;
 }
 
 .outerBox h2 {

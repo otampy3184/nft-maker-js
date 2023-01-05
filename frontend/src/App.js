@@ -158,8 +158,11 @@ function App() {
   return (
     <div className="App">
       <div className='outerBox'>
+        <h1>
+          NFT Maker JS
+        </h1>
         {!currentAccount ? (
-          <Button variant='contained' className="Button" onClick={connectWallet}>
+          <Button variant='contained' color='primary' onClick={connectWallet}>
             Connect Wallet
           </Button>
         ) : (
