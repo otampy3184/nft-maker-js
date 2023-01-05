@@ -4,6 +4,7 @@ import { Button, Input, TextareaAutosize, TextField } from "@mui/material";
 import NFTMaker from './abi/NFTMaker.json';
 import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
+import Loading from "./components/Loading"
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDEyZUM3OTFBREM0NGYyMmI0ODlmNEYxQTk1ODk2ODM2M0RGRUVGNzAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjUyMzU4NjIzMTgsIm5hbWUiOiJuZnQtbWFrZXIifQ.ozxz5s4zkcGENyU9kr_pLRK1p4LBgqgGAULJRqcwxcQ";
 const CONTRACT_ADDRESS = "0x39Ffa1CdEe990a3Dff74875f7f20fc3dA37d8904"
@@ -60,19 +61,25 @@ function App() {
         NFTMaker.abi,
         signer
       )
-      let nftTxn = await contract.mintNFT("sample", ipfsValue, {
+      const nftTxn = await contract.mintNFT("sample", ipfsValue, {
         gasLimit: 3000000,
       })
+      setIsLoading(true)
+      console.log("Minting...", nftTxn.hash);
       await nftTxn.wait()
+      console.log("Minted ---", nftTxn.hash);
       console.log(
         `Mined, see transaction: https://mumbai.etherscan.io/tx/${nftTxn.hash}`
       );
+      setIsLoading(false)
     } catch (error) {
       console.log(error)
+      setIsLoading(false)
     }
   }
 
   const uploadToIpfs = async (e) => {
+    setIsLoading(true)
     const client = new Web3Storage({ token: API_KEY })
     const image = e.target
     console.log("image data:", image)
@@ -84,7 +91,8 @@ function App() {
 
     console.log("root cid:", rootCid)
 
-    retrive(rootCid)
+    await retrive(rootCid)
+    setIsLoading(false)
   }
 
   function makeStorageClient() {
@@ -124,6 +132,9 @@ function App() {
           </Button>
         ) : (
           <div>
+            <div className='loading'>
+              {isLoading && <Loading />}
+            </div>
             <div>
               <Input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
             </div>
