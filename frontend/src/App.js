@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { Button } from "@mui/material";
+import { Button, Input, TextareaAutosize, TextField } from "@mui/material";
 import NFTMaker from './abi/NFTMaker.json';
 import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
@@ -13,6 +13,7 @@ function App() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [isLoading, setIsLoading] = useState(false);
   const [ipfsValue, setIpfsValue] = useState("");
+  const [result, setResult] = useState("")
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -84,6 +85,34 @@ function App() {
     retrive(rootCid)
   }
 
+  function makeStorageClient() {
+    return new Web3Storage({ token: API_KEY })
+  }
+
+  function makeWeb3Client() {
+    const { ethereum } = window
+    if (!ethereum) {
+      console.log("metamask object not found")
+      return
+    } else {
+      console.log("Metamask founded")
+    }
+    return ethereum
+  }
+
+  const retrive = async (cid) => {
+    const client = makeStorageClient();
+    const response = await client.get(cid)
+    if (!response.ok) {
+      throw new Error("failed to get response")
+    }
+    const files = await response.files()
+    for (const file of files) {
+      setResult(file.cid)
+      console.log("file.cid:", file.cid)
+    }
+  }
+
   return (
     <div className="App">
       {!currentAccount ? (
@@ -93,11 +122,19 @@ function App() {
       ) : (
         <div>
           <div>
-            <input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
+            <Input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
           </div>
+          {result ? (
+            <div>
+              <pre>{result}</pre>
+              <button onClick={() => navigator.clipboard.writeText(result)}>
+                Copy IPFS link
+              </button>
+            </div>
+          ) : null}
           <div>
-            <textarea
-              className='textArea'
+            <TextField
+              variant='standard'
               name="ipfsLink"
               placeholder="IPFSのリンクを入力"
               type="text"
@@ -105,7 +142,7 @@ function App() {
               value={ipfsValue}
               onChange={(e) => setIpfsValue(e.target.value)}
             />
-            <Button variant='contained' className="Button" onClick={mintNFT}>
+            <Button variant='contained' onClick={mintNFT}>
               Mint
             </Button>
           </div>
@@ -113,33 +150,6 @@ function App() {
       )}
     </div>
   );
-}
-
-function makeStorageClient() {
-  return new Web3Storage({ token: API_KEY })
-}
-
-function makeWeb3Client() {
-  const { ethereum } = window
-  if (!ethereum) {
-    console.log("metamask object not found")
-    return
-  } else {
-    console.log("Metamask founded")
-  }
-  return ethereum
-}
-
-const retrive = async (cid) => {
-  const client = makeStorageClient();
-  const response = await client.get(cid)
-  if (!response.ok) {
-    throw new Error("failed to get response")
-  }
-  const files = await response.files()
-  for (const file of files) {
-    console.log("file.cid:", file.cid)
-  }
 }
 
 export default App;
