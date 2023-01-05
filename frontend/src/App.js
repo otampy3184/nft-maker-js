@@ -1,13 +1,15 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Button, Input, TextareaAutosize, TextField } from "@mui/material";
-import NFTMaker from './abi/NFTMaker.json';
+// import NFTMaker from './abi/NFTMaker_goerli.json';
+import NFTMaker from './abi/NFTMaker_mumbai.json'
 import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
 import Loading from "./components/Loading"
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDEyZUM3OTFBREM0NGYyMmI0ODlmNEYxQTk1ODk2ODM2M0RGRUVGNzAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjUyMzU4NjIzMTgsIm5hbWUiOiJuZnQtbWFrZXIifQ.ozxz5s4zkcGENyU9kr_pLRK1p4LBgqgGAULJRqcwxcQ";
-const CONTRACT_ADDRESS = "0xad0c8B98E36c83c018Aa4b95d8e8ba8D9f72aa31"
+const CONTRACT_ADDRESS_GOERLI = "0xad0c8B98E36c83c018Aa4b95d8e8ba8D9f72aa31"
+const CONTRACT_ADDRESS_MUMBAI = "0x9E374C11Fed10856b9745fc48cdD6374d3CDD833"
 
 function App() {
 
@@ -30,6 +32,7 @@ function App() {
       if (accounts.length !== 0) {
         console.log("Found acccount:", accounts[0])
         setCurrentAccount(accounts[0])
+        eventListener();
       } else {
         console.log("Account not Founded")
       }
@@ -47,6 +50,7 @@ function App() {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" })
     if (accounts.length !== 0) {
       setCurrentAccount(accounts[0])
+      eventListener();
     } else {
       console.log("Account not found")
     }
@@ -57,12 +61,13 @@ function App() {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const signer = provider.getSigner()
       const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
+        CONTRACT_ADDRESS_MUMBAI,
+        // CONTRACT_ADDRESS_GOERLI,
         NFTMaker.abi,
         signer
       )
-      const nftTxn = await contract.mintNFT("sample", ipfsValue, {
-        gasLimit: 3000000,
+      const nftTxn = await contract.mintNFT("sample", result, {
+        gasLimit: 300000,
       })
       setIsLoading(true)
       console.log("Minting...", nftTxn.hash);
@@ -93,6 +98,33 @@ function App() {
 
     await retrive(rootCid)
     setIsLoading(false)
+  }
+
+  const eventListener = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS_MUMBAI,
+          // CONTRACT_ADDRESS_GOERLI,
+          NFTMaker.abi,
+          signer
+        );
+        connectedContract.on("NewNFTMinted", (from, tokenId) => {
+          console.log(from, tokenId.toNumber());
+          alert(
+            `Openseaへのリンク : https://testnets.opensea.io/assets/goerli/${CONTRACT_ADDRESS_MUMBAI}/${tokenId.toNumber()}`
+          );
+        })
+        console.log("Setup event lisner");
+      } else {
+        console.log("Ethereum object does not found");
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function makeStorageClient() {
@@ -160,7 +192,6 @@ function App() {
               </div>
             ) : null}
             <div>
-              {result ? (
                 <div>
                   <TextField
                     variant='outlined'
@@ -168,7 +199,7 @@ function App() {
                     placeholder="IPFSのリンクを入力"
                     type="text"
                     id="ipfs"
-                    value={ipfsValue}
+                    value={result}
                     onChange={(e) => setIpfsValue(e.target.value)}
                     multiline
                     rows={1}
@@ -178,7 +209,6 @@ function App() {
                     Mint
                   </Button>
                 </div>
-              ) : null}
             </div>
           </div>
         )}
