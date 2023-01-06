@@ -7,27 +7,18 @@ import ConnectWallet from './components/ConnectWallet';
 import MintNFT from './components/MintNFT';
 
 function App() {
+  // 子コンポーネント間でStateのやりとりを行うので親側で全て管理
   const [currentAccount, setCurrentAccount] = useState("")
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState("")
   const [OpenseaLink, setOpenseaLink] = useState("");
 
-  const setterAccount = (account) => {
-    setCurrentAccount(account)
-  }
-
-  const setterIsLoading = (isloading) => {
-    setIsLoading(isloading)
-  }
-
-  const setterResult = (result) => {
-    setResult(result)
-  }
-
-  const setterOpenseaLink = (opensealink) => {
-    setOpenseaLink(opensealink)
-  }
-
+  // 子コンポーネントから親のStateを操作するための関数群(もっといいやり方ある？)
+  const setterAccount = account => setCurrentAccount(account)
+  const setterIsLoading = isloading => setIsLoading(isloading)
+  const setterResult = result => setResult(result)
+  const setterOpenseaLink = opensealink => setOpenseaLink(opensealink)
+  
   return (
     <div className="App">
       <div className='outerBox'>
