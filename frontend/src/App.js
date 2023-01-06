@@ -36,6 +36,7 @@ function App() {
               result={result} />
             <MintNFT
               setterOpenseaLink={setterOpenseaLink}
+              OpenseaLink={OpenseaLink}
               setterResult={setterResult}
               result={result}
               setterIsLoading={setterIsLoading}

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import React, { useEffect } from 'react';
-import { Button, Input, Link, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 // import NFTMaker from '../abi/NFTMaker_goerli.json';
 import NFTMaker from '../abi/NFTMaker_mumbai.json'
@@ -47,10 +47,11 @@ const MintNFT = (props) => {
                     NFTMaker.abi,
                     signer
                 );
-                connectedContract.on("NewNFTMinted", (from, tokenId) => {
-                    console.log(from, tokenId.toNumber());
+                connectedContract.on("NewNFTMinted", (sender, tokenId) => {
+                    console.log(sender, tokenId.toNumber());
                     const link = `https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS_MUMBAI}/${tokenId.toNumber()}`
                     props.setterOpenseaLink(link);
+                    console.log(props.OpenseaLink)
                 })
                 console.log("Setup event lisner");
             } else {
@@ -86,8 +87,7 @@ const MintNFT = (props) => {
             </div>
             {props.OpenseaLink ? (
                 <div>
-                    <Link href=''>Link To Opensea</Link>
-                </div>
+                    <Button target="_blank" href={props.OpenseaLink}>Go to Opensea</Button>                </div>
             ) : null}
         </div>
     )
