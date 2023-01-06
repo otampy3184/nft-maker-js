@@ -18,7 +18,7 @@ function App() {
   const setterIsLoading = isloading => setIsLoading(isloading)
   const setterResult = result => setResult(result)
   const setterOpenseaLink = opensealink => setOpenseaLink(opensealink)
-  
+
   return (
     <div className="App">
       <div className='outerBox'>
@@ -29,9 +29,7 @@ function App() {
           <ConnectWallet setterAccount={setterAccount} />
         ) : (
           <div>
-            <div className='loading'>
-              {isLoading && <Loading />}
-            </div>
+            <Loading isLoading={isLoading} />
             <UploadToIPFS
               setterIsLoading={setterIsLoading}
               setterResult={setterResult}
