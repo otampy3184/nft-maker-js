@@ -41,27 +41,6 @@ const UploadToIPFS = (props) => {
     return (
         <div>
             <Input className="imageToIpfs" multiple name="imageURL" type="file" accept=".jpg, .png" onChange={uploadToIpfs} />
-            {props.result ? (
-                <div>
-                    <TextField
-                        value={props.result}
-                        multiline
-                        rows={1}
-                        variant="outlined"
-                        fullWidth
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => navigator.clipboard.writeText(props.result)}
-                    >
-                        Copy IPFS Link
-                    </Button>
-                </div>
-            ) : null}
         </div>
     )
 }
