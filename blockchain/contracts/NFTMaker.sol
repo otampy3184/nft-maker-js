@@ -39,6 +39,8 @@ contract NFTMaker is ERC721 {
             msg.sender
         );
 
+        _tokenIds.increment();
+
         emit NewNFTMinted(msg.sender, newTokenId);
     }
 

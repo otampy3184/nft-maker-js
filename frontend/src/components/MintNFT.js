@@ -5,8 +5,8 @@ import { Button, Input, Link, TextField } from "@mui/material";
 // import NFTMaker from '../abi/NFTMaker_goerli.json';
 import NFTMaker from '../abi/NFTMaker_mumbai.json'
 
-const CONTRACT_ADDRESS_GOERLI = "0x29E1AEA100EE6622f9e64e902D04cF692B3f0603"
-const CONTRACT_ADDRESS_MUMBAI = "0x0eDd66F66aBF49655C58FB248E08867E1b0220B6"
+// const CONTRACT_ADDRESS_GOERLI = "0x29E1AEA100EE6622f9e64e902D04cF692B3f0603"
+const CONTRACT_ADDRESS_MUMBAI = "0x962F88550a565f4f637F613213b1Cd352Fb4EB7C"
 
 const MintNFT = (props) => {
     const mintNFT = async () => {
@@ -15,7 +15,6 @@ const MintNFT = (props) => {
             const signer = provider.getSigner()
             const contract = new ethers.Contract(
                 CONTRACT_ADDRESS_MUMBAI,
-                // CONTRACT_ADDRESS_GOERLI,
                 NFTMaker.abi,
                 signer
             )
