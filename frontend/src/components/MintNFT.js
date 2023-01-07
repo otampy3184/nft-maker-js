@@ -6,7 +6,7 @@ import { Button, TextField } from "@mui/material";
 import NFTMaker from '../abi/NFTMaker_mumbai.json'
 
 // const CONTRACT_ADDRESS_GOERLI = "0x29E1AEA100EE6622f9e64e902D04cF692B3f0603"
-const CONTRACT_ADDRESS_MUMBAI = "0x97F2A66DDC25cA122582f7CEE595ac33C69470d7"
+const CONTRACT_ADDRESS_MUMBAI = "0xb57D3b3c1C8C18b47Aa8d04d795f0c2fB7622c30"
 
 const MintNFT = (props) => {
     const mintNFT = async () => {

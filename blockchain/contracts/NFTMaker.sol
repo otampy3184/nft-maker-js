@@ -11,6 +11,7 @@ contract NFTMaker is ERC721 {
     struct NFTAttributes {
         string name;
         string imageURL;
+        string description;
     }
 
     NFTAttributes[] NFTArray;
@@ -24,13 +25,14 @@ contract NFTMaker is ERC721 {
 
     event NewNFTMinted(address sender, uint256 tokenId);
 
-    function mintNFT(string memory name, string memory imageURI) public {
+    function mintNFT(string memory name, string memory imageURI, string memory description) public {
         uint256 newTokenId = _tokenIds.current();
         _safeMint(msg.sender, newTokenId);
 
         NFTArray.push(NFTAttributes({
             name: name,
-            imageURL: imageURI
+            imageURL: imageURI,
+            description: description
         }));
 
         console.log(
@@ -53,7 +55,9 @@ contract NFTMaker is ERC721 {
                         NFTArray[_tokenId].name,
                         " -- NFT #: ",
                         Strings.toString(_tokenId),
-                        '", "description": "An epic NFT", "image": "ipfs://',
+                        '", "description": "',
+                        NFTArray[_tokenId].description,
+                        '", "image": "ipfs://',
                         NFTArray[_tokenId].imageURL,
                         '"}'
                     )
