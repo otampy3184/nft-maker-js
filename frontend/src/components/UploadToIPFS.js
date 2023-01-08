@@ -1,5 +1,5 @@
 import { Web3Storage } from 'web3.storage'
-import { Button, Input, Link, TextField } from "@mui/material";
+import { Input } from "@mui/material";
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDEyZUM3OTFBREM0NGYyMmI0ODlmNEYxQTk1ODk2ODM2M0RGRUVGNzAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjUyMzU4NjIzMTgsIm5hbWUiOiJuZnQtbWFrZXIifQ.ozxz5s4zkcGENyU9kr_pLRK1p4LBgqgGAULJRqcwxcQ";
 
@@ -8,33 +8,21 @@ const UploadToIPFS = (props) => {
         props.setterIsLoading(true)
         const client = new Web3Storage({ token: API_KEY })
         const image = e.target
-        console.log("image data:", image)
-
         const rootCid = await client.put(image.files, {
             name: 'metadata',
             maxRetries: 3
         })
-
-        console.log("root cid:", rootCid)
-
         await retrive(rootCid)
         props.setterIsLoading(false)
     }
 
-    function makeStorageClient() {
-        return new Web3Storage({ token: API_KEY })
-    }
-
     const retrive = async (cid) => {
-        const client = makeStorageClient();
+        const client = new Web3Storage({ token: API_KEY})
         const response = await client.get(cid)
-        if (!response.ok) {
-            throw new Error("failed to get response")
-        }
+        if (!response.ok) throw new Error("failed to get response")
         const files = await response.files()
         for (const file of files) {
             props.setterResult(file.cid)
-            console.log("file.cid:", file.cid)
         }
     }
 

@@ -5,39 +5,19 @@ const ConnectWallet = (props) => {
 
     const connectWallet = async () => {
         const { ethereum } = window
-        if (!ethereum) {
-            console.log("metamask object not found")
-            return
-        } else {
-            console.log("Metamask founded")
-        }
+        if (!ethereum) return new Error("Ethereu object not found")
         const accounts = await ethereum.request({ method: "eth_requestAccounts" })
-        if (accounts.length !== 0) {
-            console.log(accounts[0])
-            props.setterAccount(accounts[0])
-        } else {
-            console.log("Account not found")
-        }
+        if (accounts.length === 0) return
+        props.setterAccount(accounts[0])
     }
 
     const checkIfWalletIsConnected = async () => {
         try {
             const { ethereum } = window;
-            if (!ethereum) {
-                console.log("Make sure you have Metamask")
-                return
-            } else {
-                console.log("We have an ethereum object:", ethereum)
-            }
-
+            if (!ethereum) return new Error("Ethereum object not found")
             const accounts = await ethereum.request({ method: "eth_accounts" })
-            if (accounts.length !== 0) {
-                console.log("Found acccount:", accounts[0])
-                props.setterAccount(accounts[0])
-                // eventListener();
-            } else {
-                console.log("Account not Founded")
-            }
+            if (accounts.length === 0) return new Error("Account not found")
+            props.setterAccount(accounts[0])
         } catch (error) {
             console.log(error)
         }
