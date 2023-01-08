@@ -11,13 +11,17 @@ function App() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState("")
-  const [OpenseaLink, setOpenseaLink] = useState("");
+  const [openseaLink, setOpenseaLink] = useState("");
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
 
   // 子コンポーネントから親のStateを操作するための関数群(もっといいやり方ある？)
   const setterAccount = account => setCurrentAccount(account)
   const setterIsLoading = isloading => setIsLoading(isloading)
   const setterResult = result => setResult(result)
   const setterOpenseaLink = opensealink => setOpenseaLink(opensealink)
+  const setterName = name => setName(name)
+  const setterDescription = description => setDescription(description)
 
   return (
     <div className="App">
@@ -36,10 +40,14 @@ function App() {
               result={result} />
             <MintNFT
               setterOpenseaLink={setterOpenseaLink}
-              OpenseaLink={OpenseaLink}
+              openseaLink={openseaLink}
               setterResult={setterResult}
               result={result}
+              name={name}
+              description={description}
               setterIsLoading={setterIsLoading}
+              setterName={setterName}
+              setterDescription={setterDescription}
             />
           </div>
         )}
