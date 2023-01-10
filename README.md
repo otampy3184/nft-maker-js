@@ -18,6 +18,7 @@
 
 ## フォルダ構成
 
+```:
 nft-maker-js
 ├── README.md
 ├── blockchain                         --- **Hardhatで作成したBlockchain関連のファイル**
@@ -57,6 +58,7 @@ nft-maker-js
         │   └── UploadToIPFS.js         --- **IPFSに画像をアップロードし、固有IDを取得するコンポーネント**
         ├── index.css
         └── index.js
+```
 
 ## 利用方法(VercelにデプロイされWebたアプリケーション)
 
